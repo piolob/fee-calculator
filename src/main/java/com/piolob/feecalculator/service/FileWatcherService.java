@@ -1,7 +1,6 @@
 package com.piolob.feecalculator.service;
 
 import com.piolob.feecalculator.configuration.DataFeeder;
-import com.piolob.feecalculator.configuration.FeeCalculatorConfig;
 import com.piolob.feecalculator.configuration.GlobalProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Service
 public class FileWatcherService extends Thread {
     private static final Logger LOG = LoggerFactory.getLogger(FileWatcherService.class);
+    private final CacheClearer cacheClearer = new CacheClearer(this.cacheManager);
     private AtomicBoolean stop = new AtomicBoolean(false);
 
     private GlobalProperties globalProperties;
@@ -33,14 +33,8 @@ public class FileWatcherService extends Thread {
         } else if (filename.toString().equals(globalProperties.getCustomerFeesFile().getName())) {
             dataFeeder.updateCustomerFees();
         }
-        clearCache();
+        cacheClearer.clearCache();
     }
-
-    private void clearCache() {
-        cacheManager.getCache(FeeCalculatorConfig.CALCULATED_FEES).clear();
-        cacheManager.getCache(FeeCalculatorConfig.PROCESSED_CUSTOMER).clear();
-    }
-
 
     @Override
     public void run() {

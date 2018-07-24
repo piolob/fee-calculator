@@ -13,7 +13,7 @@ public class InmemoryFeeCalculator extends AbstractFeeCalculator {
 
     @Override
     public BigDecimal calculateFee(String customerId, String currency, BigDecimal amount) throws FeeException {
-        BigDecimal discount = BigDecimal.ONE.subtract(searchCsvFileService.findFeeDiscount(currency)).multiply(searchCsvFileService.findCustomerFee(customerId, currency));
+            BigDecimal discount = BigDecimal.ONE.subtract(searchCsvFileService.findFeeDiscount(currency)).multiply(searchCsvFileService.findCustomerFee(customerId, currency));
         return amount.multiply(discount);
     }
 

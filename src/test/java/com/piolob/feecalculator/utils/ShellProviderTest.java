@@ -16,6 +16,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 public class ShellProviderTest {
+    private static final String ANY_STRING = "ANY_STRING";
 
     @Mock
     private FeeCalculator feeCalculator;
@@ -31,7 +32,7 @@ public class ShellProviderTest {
     public void shouldReturnPositiveNumberWhenNoError() throws FeeException {
         when(feeCalculator.calculateFee(anyString(), anyString(), any(BigDecimal.class))).thenReturn(BigDecimal.ONE);
 
-        BigDecimal result = shellProvider.calculatefee("ANY_STRING", "ANY_STRING", BigDecimal.ONE);
+        BigDecimal result = shellProvider.calculatefee(ANY_STRING, ANY_STRING, BigDecimal.ONE);
 
         Assert.assertTrue(result.compareTo(BigDecimal.ONE)==0);
     }
@@ -40,7 +41,7 @@ public class ShellProviderTest {
     public void shouldReturnNegativeNumberOnError() throws FeeException {
         when(feeCalculator.calculateFee(anyString(), anyString(), any(BigDecimal.class))).thenThrow(FeeException.class);
 
-        BigDecimal result = shellProvider.calculatefee("ANY_STRING", "ANY_STRING", BigDecimal.ONE);
+        BigDecimal result = shellProvider.calculatefee(ANY_STRING, ANY_STRING, BigDecimal.ONE);
 
         Assert.assertTrue(result.compareTo(BigDecimal.ONE) < 0);
     }
