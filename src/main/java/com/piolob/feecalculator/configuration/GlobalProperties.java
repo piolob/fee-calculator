@@ -7,10 +7,10 @@ import org.springframework.validation.annotation.Validated;
 
 import java.io.File;
 
-@Component
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix="fee")
 @Validated
+@Component
 public class GlobalProperties {
 
     private File inputDirectory;

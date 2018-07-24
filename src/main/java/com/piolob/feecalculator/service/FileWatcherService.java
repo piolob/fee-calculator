@@ -2,6 +2,7 @@ package com.piolob.feecalculator.service;
 
 import com.piolob.feecalculator.configuration.DataFeeder;
 import com.piolob.feecalculator.configuration.GlobalProperties;
+import com.piolob.feecalculator.utils.CacheClearer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;

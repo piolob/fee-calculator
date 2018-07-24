@@ -2,10 +2,7 @@ package com.piolob.feecalculator.service;
 
 import com.piolob.feecalculator.configuration.GlobalProperties;
 import com.piolob.feecalculator.exception.FeeException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

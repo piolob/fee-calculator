@@ -1,11 +1,11 @@
-package com.piolob.feecalculator.service;
+package com.piolob.feecalculator.utils;
 
 import org.springframework.cache.CacheManager;
 
 public class CacheClearer {
     private final CacheManager cacheManager;
 
-    CacheClearer(CacheManager cacheManager) {
+    public CacheClearer(CacheManager cacheManager) {
         this.cacheManager = cacheManager;
     }
 
