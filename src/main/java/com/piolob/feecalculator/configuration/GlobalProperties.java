@@ -18,6 +18,16 @@ public class GlobalProperties {
     private File feesDiscountsFile;
     private String defaultProcessingMode;
 
+    public GlobalProperties() {
+    }
+
+    public GlobalProperties(File inputDirectory, File customerFeesFile, File feesDiscountsFile, String defaultProcessingMode) {
+        this.inputDirectory = inputDirectory;
+        this.customerFeesFile = customerFeesFile;
+        this.feesDiscountsFile = feesDiscountsFile;
+        this.defaultProcessingMode = defaultProcessingMode;
+    }
+
     public File getInputDirectory() {
         return inputDirectory;
     }
