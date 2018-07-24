@@ -1,9 +1,8 @@
-package com.piolob.feecalculator.utils;
+package com.piolob.feecalculator.service;
 
 import com.piolob.feecalculator.configuration.DataFeeder;
 import com.piolob.feecalculator.configuration.FeeCalculatorConfig;
 import com.piolob.feecalculator.configuration.GlobalProperties;
-import com.piolob.feecalculator.exception.FeeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -28,10 +27,10 @@ public class FileWatcherService extends Thread {
         this.cacheManager = cacheManager;
     }
 
-    private void processOnChange(Path filename) throws FeeException {
-        if (filename.toString().equals(globalProperties.getFeesDiscountsFileName().getName())) {
+    private void processOnChange(Path filename) {
+        if (filename.toString().equals(globalProperties.getFeesDiscountsFile().getName())) {
             dataFeeder.updateFeeDiscounts();
-        } else if (filename.toString().equals(globalProperties.getCustomerFeesFileName().getName())) {
+        } else if (filename.toString().equals(globalProperties.getCustomerFeesFile().getName())) {
             dataFeeder.updateCustomerFees();
         }
         clearCache();
@@ -47,7 +46,7 @@ public class FileWatcherService extends Thread {
     public void run() {
         LOG.info("fileWatcherService is running...");
         try (WatchService watcher = FileSystems.getDefault().newWatchService()) {
-            Path path = globalProperties.getInputDirectoryName().toPath();
+            Path path = globalProperties.getInputDirectory().toPath();
             path.register(watcher, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.OVERFLOW);
             while (!isStopped()) {
                 WatchKey key;

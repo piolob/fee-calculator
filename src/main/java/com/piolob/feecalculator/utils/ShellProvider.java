@@ -23,12 +23,12 @@ public class ShellProvider {
 
     @ShellMethod("Calculates fee for given customerId, currency and amount")
     public BigDecimal calculatefee(String customerId, @Size(min = 3, max = 3) String currency, @Positive BigDecimal amount) {
-        BigDecimal bigDecimal = BigDecimal.ZERO;
+        BigDecimal bigDecimal = BigDecimal.ONE.negate();
         try {
             bigDecimal = feeCalculator.calculateFee(customerId, currency, amount);
         } catch (FeeException e) {
             LOG.error(e.getMessage(), e);
         }
-        return bigDecimal;//setScale(2, RoundingMode.HALF_UP)
+        return bigDecimal;//setScale(2, RoundingMode.HALF_EVEN)
     }
 }

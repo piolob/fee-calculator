@@ -1,61 +1,45 @@
 package com.piolob.feecalculator.configuration;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
 import java.io.File;
 
 @Component
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix="fee")
+@Validated
 public class GlobalProperties {
 
-    @NotNull
-    private File inputDirectoryName;
-    @Positive
-    @NotNull
-    private int maxInputSizeInKB;
-    @NotNull
-    private File customerFeesFileName;
-    @NotNull
-    private File feesDiscountsFileName;
-    @NotNull
+    private File inputDirectory;
+    private File customerFeesFile;
+    private File feesDiscountsFile;
     private String defaultProcessingMode;
 
-    public File getInputDirectoryName() {
-        return inputDirectoryName;
+    public File getInputDirectory() {
+        return inputDirectory;
     }
 
-    public void setInputDirectoryName(File inputDirectoryName) {
-        this.inputDirectoryName = inputDirectoryName;
+    public void setInputDirectory(File inputDirectory) {
+        this.inputDirectory = inputDirectory;
     }
 
-    public int getMaxInputSizeInKB() {
-        return maxInputSizeInKB;
+    public File getCustomerFeesFile() {
+        return customerFeesFile;
     }
 
-    public void setMaxInputSizeInKB(int maxInputSizeInKB) {
-        this.maxInputSizeInKB = maxInputSizeInKB;
+    public void setCustomerFeesFile(File customerFeesFile) {
+        this.customerFeesFile = customerFeesFile;
     }
 
-    public File getCustomerFeesFileName() {
-        return customerFeesFileName;
+    public File getFeesDiscountsFile() {
+        return feesDiscountsFile;
     }
 
-    public void setCustomerFeesFileName(File customerFeesFileName) {
-        this.customerFeesFileName = customerFeesFileName;
-    }
-
-    public File getFeesDiscountsFileName() {
-        return feesDiscountsFileName;
-    }
-
-    public void setFeesDiscountsFileName(File feesDiscountsFileName) {
-        this.feesDiscountsFileName = feesDiscountsFileName;
+    public void setFeesDiscountsFile(File feesDiscountsFile) {
+        this.feesDiscountsFile = feesDiscountsFile;
     }
 
     public String getDefaultProcessingMode() {

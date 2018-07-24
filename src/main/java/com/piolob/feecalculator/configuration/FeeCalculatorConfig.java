@@ -1,15 +1,12 @@
 package com.piolob.feecalculator.configuration;
 
-import com.piolob.feecalculator.service.SearchCsvFileService;
-import com.piolob.feecalculator.service.FeeCalculator;
-import com.piolob.feecalculator.service.InmemoryFeeCalculator;
-import com.piolob.feecalculator.service.StreamFeeCalculator;
-import com.piolob.feecalculator.utils.ProcessingMode;
+import com.piolob.feecalculator.service.*;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.Validator;
 
 @Configuration
 @EnableCaching
@@ -24,14 +21,18 @@ public class FeeCalculatorConfig {
     }
 
     @Bean
-    FeeCalculator feeCalculator(SearchCsvFileService searchCsvFileService, GlobalProperties globalProperties) {
-        switch (ProcessingMode.valueOf(globalProperties.getDefaultProcessingMode())) {
-            case INMEMORY_MODE:
-                return new InmemoryFeeCalculator(searchCsvFileService, globalProperties);
-            case STREAM_MODE:
-                return new StreamFeeCalculator(searchCsvFileService, globalProperties);
-            default:
-                return new InmemoryFeeCalculator(searchCsvFileService, globalProperties);
-        }
+    FeeCalculatorFactory feeCalculatorFactory(SearchCsvFileService searchCsvFileService, GlobalProperties globalProperties) {
+        return new FeeCalculatorFactory(searchCsvFileService, globalProperties);
     }
+
+    @Bean
+    FeeCalculator feeCalculator(FeeCalculatorFactory feeCalculatorFactory) {
+        return feeCalculatorFactory.getFeeCalculator();
+    }
+
+    @Bean
+    public static Validator configurationPropertiesValidator() {
+        return new GlobalPropertiesValidator();
+    }
+
 }

@@ -1,7 +1,7 @@
 package com.piolob.feecalculator.configuration;
 
-import com.piolob.feecalculator.exception.FeeException;
 import com.piolob.feecalculator.model.CustomerFee;
+import com.piolob.feecalculator.utils.ProcessingMode;
 import com.univocity.parsers.common.processor.BeanListProcessor;
 import com.univocity.parsers.common.processor.ConcurrentRowProcessor;
 import com.univocity.parsers.common.record.Record;
@@ -15,10 +15,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.piolob.feecalculator.utils.ProcessingMode.INMEMORY_MODE;
+
 @Component
 public class DataFeeder {
-
-    public static final String PROBLEM_WITH_INPUT_FILE = "Problem with input file";
     private Map<String, BigDecimal> feeDiscounts;
     private List<CustomerFee> customerFees;
     private GlobalProperties globalProperties;
@@ -28,23 +28,19 @@ public class DataFeeder {
     }
 
     @PostConstruct
-    private void updateData() throws FeeException {
+    private void updateData() {
         updateCustomerFees();
         updateFeeDiscounts();
     }
 
 
-    private Map<String, BigDecimal> feedFeeDiscounts() throws FeeException {
+    private Map<String, BigDecimal> feedFeeDiscounts() {
         CsvParserSettings settings = new CsvParserSettings();
         CsvParser parser = new CsvParser(settings);
-        try {
-            parser.beginParsing(globalProperties.getFeesDiscountsFileName());
-        } catch (NullPointerException e) {
-            throw new FeeException(PROBLEM_WITH_INPUT_FILE);
-        }
+        parser.beginParsing(globalProperties.getFeesDiscountsFile());
 
         Map<String, BigDecimal> feeDiscounts = new HashMap<>();
-        for (Record record : parser.iterateRecords(globalProperties.getFeesDiscountsFileName())) {
+        for (Record record : parser.iterateRecords(globalProperties.getFeesDiscountsFile())) {
             if (record.getBigDecimal(1) != null) {
                 feeDiscounts.putIfAbsent(record.getString(0), record.getBigDecimal(1));
             } else {
@@ -54,26 +50,24 @@ public class DataFeeder {
         return feeDiscounts;
     }
 
-    private List<CustomerFee> feedCustomerFees() throws FeeException {
+    private List<CustomerFee> feedCustomerFees() {
         BeanListProcessor<CustomerFee> rowProcessor = new BeanListProcessor<>(CustomerFee.class);
         CsvParserSettings parserSettings = new CsvParserSettings();
         parserSettings.setProcessor(new ConcurrentRowProcessor(rowProcessor));
         CsvParser parser = new CsvParser(parserSettings);
-        try {
-            parser.beginParsing(globalProperties.getFeesDiscountsFileName());
-        } catch (NullPointerException e) {
-            throw new FeeException(PROBLEM_WITH_INPUT_FILE);
-        }
-        parser.parse(globalProperties.getCustomerFeesFileName());
+        parser.beginParsing(globalProperties.getFeesDiscountsFile());
+        parser.parse(globalProperties.getCustomerFeesFile());
         return rowProcessor.getBeans();
     }
 
-    public void updateFeeDiscounts() throws FeeException {
+    public void updateFeeDiscounts() {
         this.feeDiscounts = feedFeeDiscounts();
     }
 
-    public void updateCustomerFees() throws FeeException {
-        this.customerFees = feedCustomerFees();
+    public void updateCustomerFees() {
+        if (ProcessingMode.valueOf(globalProperties.getDefaultProcessingMode())==INMEMORY_MODE){
+            this.customerFees = feedCustomerFees();
+        }
     }
 
     public Map<String, BigDecimal> getFeeDiscounts() {

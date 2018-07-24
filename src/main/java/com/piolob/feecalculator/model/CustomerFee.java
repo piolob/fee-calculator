@@ -10,6 +10,12 @@ public class CustomerFee {
     public CustomerFee() {
     }
 
+    public CustomerFee(String id, String currency, BigDecimal fee) {
+        this.id = id;
+        this.currency = currency;
+        this.fee = fee;
+    }
+
     @Parsed(index = 0)
     private String id;
 
@@ -18,15 +24,6 @@ public class CustomerFee {
 
     @Parsed(index = 2)
     private BigDecimal fee;
-
-    public CustomerFee(String id, String currency, BigDecimal fee) {
-        this.id = id;
-        this.currency = currency;
-        this.fee = fee;
-    }
-
-    public CustomerFee(List<Object> objects) {
-    }
 
     public String getCurrency() {
         return currency;
