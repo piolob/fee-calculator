@@ -17,7 +17,6 @@ import org.springframework.test.context.junit4.SpringRunner;
         ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT_ENABLED + "=false"
 })
 public class DataFeederIT {
-    private static final String ANY_STRING = "ANY_STRING";
 
     @Autowired
     GlobalProperties globalProperties;
@@ -30,50 +29,46 @@ public class DataFeederIT {
     }
 
     @Test
-    public void shouldUpdateFeeDiscounts() {
-        dataFeeder.updateFeeDiscounts();
-
-        Assert.assertNotNull(dataFeeder.getFeeDiscounts());
-        Assert.assertTrue(dataFeeder.getFeeDiscounts().size()>0);
-    }
-
-    @Test
-    public void shouldUpdateCustomerFeesOnInmemoryMode() {
+    public void shouldUpdateCustomerFeesOnInmemoryModeWhenUpdatingCustomerFees() {
         globalProperties.setDefaultProcessingMode(ProcessingMode.INMEMORY_MODE.name());
 
         dataFeeder.updateCustomerFees();
 
         Assert.assertNotNull(dataFeeder.getCustomerFees());
         Assert.assertTrue(dataFeeder.getCustomerFees().size()>0);
+        Assert.assertNull(dataFeeder.getFeeDiscounts());
     }
 
     @Test
-    public void shouldNotUpdateCustomerFeesOnStreamMode() {
+    public void shouldNotUpdateCustomerFeesOnOnStreamModeWhenUpdatingCustomerFees() {
         globalProperties.setDefaultProcessingMode(ProcessingMode.STREAM_MODE.name());
 
         dataFeeder.updateCustomerFees();
 
         Assert.assertNull(dataFeeder.getCustomerFees());
+        Assert.assertNull(dataFeeder.getFeeDiscounts());
     }
 
     @Test
-    public void shouldUpdateAllOnInmemoryMode() {
+    public void shouldUpdateFeeDiscountsOnInmemoryModeWhenUpdatingFeeDiscounts() {
         globalProperties.setDefaultProcessingMode(ProcessingMode.INMEMORY_MODE.name());
 
-        dataFeeder.updateCustomerFees();
+        dataFeeder.updateFeeDiscounts();
 
-        Assert.assertNotNull(dataFeeder.getCustomerFees());
-        Assert.assertTrue(dataFeeder.getCustomerFees().size()>0);
+        Assert.assertNotNull(dataFeeder.getFeeDiscounts());
+        Assert.assertTrue(dataFeeder.getFeeDiscounts().size()>0);
+        Assert.assertNull(dataFeeder.getCustomerFees());
     }
 
+
     @Test
-    public void shouldUpdateOnlyFeeDiscountsOnStreamMode() {
-        globalProperties.setDefaultProcessingMode(ProcessingMode.INMEMORY_MODE.name());
+    public void shouldUpdateFeeDiscountsOnStreamModeWhenUpdatingFeeDiscounts() {
+        globalProperties.setDefaultProcessingMode(ProcessingMode.STREAM_MODE.name());
 
-        dataFeeder.updateCustomerFees();
+        dataFeeder.updateFeeDiscounts();
 
-        Assert.assertNotNull(dataFeeder.getCustomerFees());
-        Assert.assertTrue(dataFeeder.getCustomerFees().size()>0);
+        Assert.assertNotNull(dataFeeder.getFeeDiscounts());
+        Assert.assertTrue(dataFeeder.getFeeDiscounts().size()>0);
         Assert.assertNull(dataFeeder.getCustomerFees());
     }
 }
