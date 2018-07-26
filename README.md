@@ -18,5 +18,5 @@ W zależności od wybranego trybu do obliczania oplaty za transakcje bedzie wyko
 Dane z pliku `fees_discounts.csv` zczytywane sa do pamieci, poniewaz jest ich niewiele. W trakcie uruchamiania aplikacji wlaczany jest serwis `FileWatcherService` nasluchujacy zmiany w plikach. W przypadku gdy to nastapi resetowany jest Cache (standardowa Springowa implementacja), ktory wykorzysywany jest do przetrzymywania wynikow obliczen. Z cikawszych rzeczy wykorzystalem Spring Shella, ktory umozliwia wstepna walidacje danych wejsciowych oraz prace na konsoli.
 
 # Uzycie
-1. Konfiguracja application.properties
+1. Konfiguracja application.properties oraz application-test.properties (ta wersja propertiesow jest przeznaczona do testow integracyjnych)
 1. W konsoli uzycie metody `calculatefee (String customerId, String currency, BigDecimal amount)` na zasadzie: `calculatefee 123321123 PLN 150`
